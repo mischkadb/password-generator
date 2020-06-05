@@ -7,6 +7,9 @@ https://www1.ids-mannheim.de/kl/projekte/methoden/derewo.html
 """
 
 
+import os
+
+
 def get_word_from_derewo_line(line):
     """Processor for individual line from DeReWo textfile.
 
@@ -46,7 +49,7 @@ def word_is_valid(word, min_word_length, max_word_length):
         return False
 
     # word length must be in boundary
-    if not min_word_length <= len(word) <= max_word_length:
+    if not min_word_length <= len(word) <= max_word_length:  # noqa: WPS508
         return False
 
     return True
@@ -65,7 +68,8 @@ def generate_wordlist(max_num_words=5000, min_word_length=3, max_word_length=8):
     """
     wordlist = set()
 
-    with open('derewo-v-ww-bll-320000g-2012-12-31-1.0.txt', 'r', errors='replace') as derewo_file:
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    with open(f'{dir_path}/derewo-v-ww-bll-320000g-2012-12-31-1.0.txt', 'r', errors='replace') as derewo_file:
         for line in derewo_file.read().splitlines():
             word = get_word_from_derewo_line(line)
 
@@ -81,21 +85,46 @@ def generate_wordlist(max_num_words=5000, min_word_length=3, max_word_length=8):
 
 
 def save_to_file(wordlist, min_word_length, max_word_length):
+    """Write wordlist to file.
+
+    Name convention is 'wordlist-{wordlist_length}-{min_word_length}-{max_word_length}.txt'.
+    Words are on individual lines.
+
+    Args:
+        wordlist: List of words to be written to file
+        min_word_length: Minimum length per word
+        max_word_length: Maximum length per word
+    """
     wordlist_length = len(wordlist)
     out_file_name = f'wordlist-{wordlist_length}-{min_word_length}-{max_word_length}.txt'
 
     with open(out_file_name, 'w') as out_file:
         wordlist = sorted(wordlist)
         for word in wordlist:
-            out_file.write(word + '\n')
+            out_file.write(word, '\n')
 
 
 def load_from_file(filename):
+    """Load wordlist from file.
+
+    Args:
+        filename: Name of file to load wordlist from
+
+    Returns:
+        List of words read from file
+    """
     with open(filename, 'r') as in_file:
         return in_file.read().splitlines()
 
 
 def generate_file(max_num_words=5000, min_word_length=3, max_word_length=8):
+    """Generate wordlist and write it to file.
+
+    Args:
+        max_num_words: Maximum number of words in wordlist
+        min_word_length: Minimum length per word
+        max_word_length: Maximum length per word
+    """
     wordlist = generate_wordlist(max_num_words, min_word_length, max_word_length)
     save_to_file(wordlist, min_word_length, max_word_length)
 

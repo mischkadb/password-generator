@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="de" style="height: 100%">
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+        
+        <!-- Custom CSS -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+        
+        <title>Passwort-Generator</title>
+    </head>
+ 
+    <body class="bg-dark text-light" style="height: 100%">
+        <div class="container d-flex h-100 justify-content-center">
+            <div class="row align-self-center">
+                <div class="col-12 text-center">
+                    <h1 class="font-weight-bold">Passwort-Generator</h1>
+                    <small>Generiert Multi-Wort-Passwörter aus häufig vorkommenden, deutschen Wörtern.</small>
+                    <small><a href="https://github.com/mischkadb/password-generator">Code</a></small>
+                    <hr>
+                    <h2 class="font-weight-bold">Einstellungen</h2>
+                    <form action="" method="post">
+                        {{ form.hidden_tag() }}
+                        <div class="form-group row">
+                            <div class="col-6">
+                                {{ form.amount.label() }}
+                            </div>
+                            <div class="col-2">
+                                {{ form.amount(size=2, min=1, max=10) }}
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-6">
+                                {{ form.words_per_password.label() }}
+                            </div>
+                            <div class="col-2">
+                                {{ form.words_per_password(size=2, min=3, max=10) }}
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-6">
+                                {{ form.min_word_length.label() }}
+                            </div>
+                            <div class="col-2">
+                                {{ form.min_word_length(size=2, min=3, max=5) }}
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-6">
+                                {{ form.max_word_length.label() }}
+                            </div>
+                            <div class="col-2">
+                                {{ form.max_word_length(size=2, min=4, max=12) }}
+                            </div>
+                        </div>
+                        
+                        <div class="form-group row">
+                            <div class="col-6">
+                                {{ form.max_words_in_wordlist.label() }}
+                            </div>
+                            <div class="col-auto">
+                                {{ form.max_words_in_wordlist(class="form-control") }}
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-12">
+                                {{ form.submit(class="btn btn-success") }}
+                            </div>
+                        </div>                     
+                        
+
+
+                    </form>
+                    <hr>
+                    <h2 class="font-weight-bold">Generierte Passwörter</h2>
+                    {% for password in passwords %}
+                    <p>{{ password }}</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
